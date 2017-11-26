@@ -50,4 +50,4 @@ ggplot(data, aes(x = x, y = y)) + geom_point() +
 	theme(legend.position = "bottom") + theme_bw()
 ```
 
-This shows the improvement `reg.lm()` and `crossval()` make. For more detail, see the vignette.
+This shows the improvement `reg.lm()` and `crossval()` make. For more detail, see my vignette.
