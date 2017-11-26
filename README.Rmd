@@ -33,21 +33,39 @@ Then this is the result of cubic fits using `lm()`, `reg.lm()`, and `crossval()`
 #lm
 fit <- lm(y ~ cbind(x, x^2,x^3))
 fit <- as.numeric(fit$coefficients)
+fit
+```
 
+We can see that all the coefficients are quite large leading to a lot of wavering of the function.
+
+```{r}
 #reg.lm
 regcube <- reg.lm(y, x, degree = 3)
+regcube
 regfit <- regcube$coefficients
+```
 
+Here we can see a bit more moderation in the coefficients, especially in the 3rd order one. Note that this one used lambda = 1.
+
+We can see if there's any values of lambda that give better fits by using `cv.fit()`:
+
+```{r}
 #crossval
 cv.fit <- crossval(y, x, degree = 3, lambda = c(0.1, 1, 10))
+cv.fit
 cv.fit <- cv.fit$coefficients
+```
 
+This one has even more moderation. Note that although the error here is larger than for `reg.lm()`; this doesn't mean that `crossval()` gave a worse fit. This happens because `crossval()` looks at the ability to make predictions of general trends, which if you plot you will see that its fit is closest to the x^2 function to the naked eye in the following plot:
+
+```{r}
 ggplot(data, aes(x = x, y = y)) + geom_point() + 
 	stat_function(fun = function(x) fit[1] + fit[2]*x + fit[3]*x^2 + fit[4]*x^3, aes(color = 'unregularized')) + 
-	stat_function(fun = function(x) regfit[1] + regfit[2]*x + regfit[3]*x^2 + regfit[4]*x^3, aes(color = 'regularized')) + 
+	stat_function(fun = function(x) regfit[1] + regfit[2]*x + regfit[3]*x^2 + regfit[4]*x^3, aes(color = 'regularized')) + 	
 	stat_function(fun = function(x) cv.fit[1] + cv.fit[2]*x + cv.fit[3]*x^2 + cv.fit[4]*x^3, aes(color = 'cross validated')) +
 	stat_function(fun = function(x) x^2, color = 'grey') +
 	theme(legend.position = "bottom") + theme_bw()
 ```
 
-This shows the improvement `reg.lm()` and `crossval()` make. For more detail, see my vignette.
+For more detail, see the vignette.
+
