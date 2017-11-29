@@ -51,6 +51,7 @@ crossval <- function(y, x, partitions = 5, degree = 1, lambda = c(0.1, 1, 10)){
 				sum((Ytest - Xtest %*% fit)^2)
 		}
 	}
+	s
 	j <- which.min(error) # finds index with lowest error
 	best.fit <- reg.lm(y,x, degree = degree, lambda = lambda[j])
 	list(lambda = lambda[j], coefficients = best.fit$coefficients, error = best.fit$error)
