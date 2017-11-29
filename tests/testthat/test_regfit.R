@@ -13,7 +13,8 @@ test_that("Are they the same when lambda != 0", {
 	y <- c(0.2, -3, 7.1)
 	reg <- reg.lm(y,x,lambda = 0.1)
 	lm <- lm(y~x)
-	expect_equal(as.numeric(lm$coefficients), as.numeric(reg$coefficients))
+	expect_false(as.numeric(lm$coefficients)[1]==as.numeric(reg$coefficients)[1])
+	expect_false(as.numeric(lm$coefficients)[2]==as.numeric(reg$coefficients)[2])
 })
 
 test_that("Does fit have positive slope when data positively correlated?", {

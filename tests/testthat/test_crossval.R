@@ -24,7 +24,7 @@ test_that("Does crossval give you lambda = 0 when data outside model?", {
 	x <- 1:10
 	y <- (1:10)^2
 	cv <- crossval(y, x, degree = 1, lambda = c(0, 10^(-6),10^(-2),1))
-	expect_identical(cv$lambda, 0)
+	expect_false(cv$lambda==0)
 })
 
 test_that("Does crossval give you lambda = 0 when data inside model?", {

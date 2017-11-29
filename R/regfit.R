@@ -38,8 +38,9 @@ reg.lm <- function(y, x, degree = 1, lambda = 1){
 	Y <- as.matrix(y)
 	X <- NULL
 	for(i in 0:degree){
-		X <- cbind(X,x^i)
+		X <- cbind(X,x^i) # build polynomial
 	}
+	# minimize error
 	fit <- solve(t(X) %*% X + lambda*diag(ncol(X))) %*% t(X) %*% Y
 	error <- sum((Y - X %*% fit)^2) + lambda * sum(fit^2)
 	list(coefficients = fit, error = error)

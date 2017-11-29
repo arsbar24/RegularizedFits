@@ -26,32 +26,32 @@ crossval <- function(y, x, partitions = 5, degree = 1, lambda = c(0.1, 1, 10)){
 	if(length(y) != length(x)){
 		stop("Dependent and independent observations must be same length")
 	}
-	if(is.numeric(lambda) == FALSE){
-		stop("lambda must be numeric.")
+	if(is.numeric(lambda) == FALSE||lambda<0){
+		stop("lambda must be numeric value >= 0.")
 	}
 	if(length(lambda) == 1){
 		stop("Not much point doing this if you're just testing a single lambda value.")
 	}
 	N <- length(x)
-	n <- floor(N/partitions)
-	error <- rep(0, length(lambda))
+	n <- floor(N/partitions) # length of each partition
+	error <- rep(0, length(lambda)) # initialize
 	for(i in 1:partitions){
-		indices <- ((i-1)*n+1):(i*n)
+		indices <- ((i-1)*n+1):(i*n) # define partition
 		X <- x[indices]
 		Y <- y[indices]
 		Xtest <- NULL
 		for(d in 0:degree){
-			Xtest <- cbind(Xtest, x[-indices]^d)
+			Xtest <- cbind(Xtest, x[-indices]^d) # define polynomial for test data
 		}
 		Ytest <- y[-indices]
 		for(j in 1:length(lambda)){
+			# calculate fits and error for different lambda values
 			fit <- reg.lm(Y, X, degree = degree, lambda = lambda[j])
 			fit <- fit$coefficients
 			error[j] <- error[j] +
 				sum((Ytest - Xtest %*% fit)^2)
 		}
 	}
-	s
 	j <- which.min(error) # finds index with lowest error
 	best.fit <- reg.lm(y,x, degree = degree, lambda = lambda[j])
 	list(lambda = lambda[j], coefficients = best.fit$coefficients, error = best.fit$error)
